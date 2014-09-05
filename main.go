@@ -14,8 +14,9 @@ var port = flag.Int("p", 9527, "port to listen")
 var secret = flag.String("s", "", "github secret")
 var script = flag.String("e", "", "script to execute")
 
-func index(p martini.Params) {
-	log.Println(p)
+func index(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	log.Println(r.Form)
 	out, err := exec.Command(*script).Output()
 	if err != nil {
 		log.Fatal(err)
