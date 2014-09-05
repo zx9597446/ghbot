@@ -8,15 +8,15 @@ import (
 	"os/exec"
 
 	"github.com/go-martini/martini"
+	"github.com/martini-contrib/binding"
 )
 
 var port = flag.Int("p", 9527, "port to listen")
 var secret = flag.String("s", "", "github secret")
 var script = flag.String("e", "", "script to execute")
 
-func index(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
-	log.Println(r.Form, r.PostForm)
+func index(v interface{}) {
+	log.Println(v)
 	out, err := exec.Command(*script).Output()
 	if err != nil {
 		log.Fatal(err)
@@ -31,7 +31,8 @@ func main() {
 		return
 	}
 	m := martini.Classic()
-	m.Post("/", index)
+	var v interface{}
+	m.Post("/", binding.Bind(v), index)
 	addr := fmt.Sprintf(":%d", *port)
 	log.Fatal(http.ListenAndServe(addr, m))
 }
