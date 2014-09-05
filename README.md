@@ -2,7 +2,7 @@ ghbot
 =====
 
 ##what for
-this tool allow you run a script after a git push(github). 
+this tool allow you run a script after a git push(github).  
 git push ---> github --github webhooks--> your server
 
 ##how to install
