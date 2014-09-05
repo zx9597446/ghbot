@@ -3,7 +3,6 @@ package main
 import (
 	"crypto/hmac"
 	"crypto/sha1"
-	"encoding/base64"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -22,7 +21,7 @@ func ComputeHmac256(message string, secret string) string {
 	key := []byte(secret)
 	h := hmac.New(sha1.New, key)
 	h.Write([]byte(message))
-	return base64.StdEncoding.EncodeToString(h.Sum(nil))
+	return string(h.Sum(nil))
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
