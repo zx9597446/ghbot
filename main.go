@@ -34,7 +34,7 @@ func index(w http.ResponseWriter, r *http.Request) string {
 		fmt.Println(msg)
 		return msg
 	}
-	out, err := exec.Command(*script).Output()
+	out, err := exec.Command("sh", *script).Output()
 	if err != nil {
 		fmt.Println(err)
 		return err.Error()
