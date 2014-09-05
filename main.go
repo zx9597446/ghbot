@@ -16,7 +16,7 @@ var script = flag.String("e", "", "script to execute")
 
 func index(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	log.Println(r.Form)
+	log.Println(r.Form, r.PostForm)
 	out, err := exec.Command(*script).Output()
 	if err != nil {
 		log.Fatal(err)
