@@ -24,20 +24,23 @@ func ComputeHmac(message string, secret string) string {
 	return fmt.Sprintf("%x", h.Sum(nil))
 }
 
-func index(w http.ResponseWriter, r *http.Request) {
+func index(w http.ResponseWriter, r *http.Request) string {
 	sig := r.Header.Get("X-Hub-Signature")
 	defer r.Body.Close()
 	body, _ := ioutil.ReadAll(r.Body)
 	sig1 := fmt.Sprintf("sha1=%s", ComputeHmac(string(body), *secret))
 	if sig != sig1 {
-		fmt.Println("signature not match", sig, sig1)
-		return
+		msg := fmt.Sprintln("signature not match", sig, sig1)
+		fmt.Println(msg)
+		return msg
 	}
 	out, err := exec.Command(*script).Output()
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		return err.Error()
 	}
 	fmt.Println(out)
+	return string(out)
 }
 
 func main() {
