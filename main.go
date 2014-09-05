@@ -17,7 +17,7 @@ var port = flag.Int("p", 9527, "port to listen")
 var secret = flag.String("s", "", "github secret")
 var script = flag.String("e", "", "script to execute")
 
-func ComputeHmac256(message string, secret string) string {
+func ComputeHmac(message string, secret string) string {
 	key := []byte(secret)
 	h := hmac.New(sha1.New, key)
 	h.Write([]byte(message))
@@ -28,8 +28,11 @@ func index(w http.ResponseWriter, r *http.Request) {
 	sig := r.Header.Get("X-Hub-Signature")
 	defer r.Body.Close()
 	body, _ := ioutil.ReadAll(r.Body)
-	sig1 := ComputeHmac256(string(body), *secret)
-	fmt.Println(sig, sig1)
+	sig1 := fmt.Sprintf("sha1=%s", ComputeHmac(string(body), *secret))
+	if sig != sig1 {
+		fmt.Println("signature not match", sig, sig1)
+		return
+	}
 	out, err := exec.Command(*script).Output()
 	if err != nil {
 		log.Fatal(err)
