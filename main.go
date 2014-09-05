@@ -16,6 +16,7 @@ import (
 var port = flag.Int("p", 9527, "port to listen")
 var secret = flag.String("s", "", "github secret")
 var script = flag.String("e", "", "script to execute")
+var test = flag.Bool("t", false, "run script then exit")
 
 func ComputeHmac(message string, secret string) string {
 	key := []byte(secret)
@@ -39,7 +40,7 @@ func index(w http.ResponseWriter, r *http.Request) string {
 		fmt.Println(err)
 		return err.Error()
 	}
-	fmt.Println(out)
+	fmt.Println(string(out))
 	return string(out)
 }
 
@@ -47,6 +48,15 @@ func main() {
 	flag.Parse()
 	if *script == "" || *secret == "" {
 		flag.PrintDefaults()
+		return
+	}
+	if *test == true {
+		out, err := exec.Command("sh", *script).Output()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Println(string(out))
 		return
 	}
 	m := martini.Classic()
