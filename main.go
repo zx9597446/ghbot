@@ -21,7 +21,7 @@ func ComputeHmac256(message string, secret string) string {
 	key := []byte(secret)
 	h := hmac.New(sha1.New, key)
 	h.Write([]byte(message))
-	return string(h.Sum(nil))
+	return fmt.Sprintf("%x", h.Sum(nil))
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
