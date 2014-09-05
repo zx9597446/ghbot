@@ -7,7 +7,7 @@ git push ---> github --github webhooks--> your server
 
 ##how to install
 if you already have go installed, run:  
-		go get -u github.com/zx9597446/ghbot  
+		`go get -u github.com/zx9597446/ghbot`
 or you can download binary from [gobuild.io](http://gobuild.io)  
 		wget gobuild.io/github.com/zx9597446/ghbot/master/linux/amd64 -O output.zip
 
