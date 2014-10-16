@@ -46,7 +46,7 @@ func index(w http.ResponseWriter, r *http.Request) string {
 
 func main() {
 	flag.Parse()
-	if *script == "" || *secret == "" {
+	if *script == "" {
 		flag.PrintDefaults()
 		return
 	}
@@ -57,6 +57,10 @@ func main() {
 			return
 		}
 		fmt.Println(string(out))
+		return
+	}
+	if *secret == "" {
+		flag.PrintDefaults()
 		return
 	}
 	m := martini.Classic()
