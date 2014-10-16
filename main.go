@@ -53,10 +53,10 @@ func main() {
 	if *test == true {
 		out, err := exec.Command("sh", *script).Output()
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 			return
 		}
-		fmt.Println(string(out))
+		log.Println(string(out))
 		return
 	}
 	if *secret == "" {
