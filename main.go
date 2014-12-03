@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"os/exec"
 
 	"github.com/go-martini/martini"
@@ -32,7 +33,7 @@ func index(w http.ResponseWriter, r *http.Request) string {
 	sig1 := fmt.Sprintf("sha1=%s", ComputeHmac(string(body), *secret))
 	if sig != sig1 {
 		msg := fmt.Sprintln("signature not match", sig, sig1)
-		fmt.Println(msg)
+		log.Println(msg)
 		return msg
 	}
 	out, err := exec.Command("sh", *script).Output()
@@ -64,6 +65,7 @@ func main() {
 		return
 	}
 	m := martini.Classic()
+	m.Map(log.New(os.Stdout, "", log.LstdFlags))
 	m.Post("/", index)
 	addr := fmt.Sprintf(":%d", *port)
 	log.Fatal(http.ListenAndServe(addr, m))
